@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+group 'cn.edu.sdu'
+version '1.0'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.34.Final'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
+    compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.6'
+}
+
+jar {
+    from {
+        configurations.runtime.collect{zipTree(it)}
+    }
+    manifest {
+        attributes 'Main-Class': 'cn.edu.sdu.attachmentServer.server.Main'
+    }
+}
