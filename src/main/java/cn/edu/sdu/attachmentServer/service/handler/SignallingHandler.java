@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileOutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,7 +121,7 @@ public class SignallingHandler extends ChannelInboundHandlerAdapter {
 
     private void writeToFile(String fileName, byte[] data) {
         log.info(fileName);
-        try (FileOutputStream fos= new FileOutputStream("photos/" + fileName.trim(), true)) {
+        try (FileOutputStream fos= new FileOutputStream("/home/attach/data/photos/" + fileName.trim(), true)) {
             fos.write(data);
         } catch (Exception e) {
             e.printStackTrace();
@@ -143,7 +144,7 @@ public class SignallingHandler extends ChannelInboundHandlerAdapter {
 
         for (int i = 0; i < fileNum; i++) {
             int fileNameLength = byteBuf.readByte();
-            String fileName = byteBuf.readCharSequence(fileNameLength, Charset.forName("utf8")).toString().trim();
+            String fileName = byteBuf.readCharSequence(fileNameLength, StandardCharsets.UTF_8).toString().trim();
             long fileSize = byteBuf.readUnsignedInt();
         }
 
@@ -153,7 +154,7 @@ public class SignallingHandler extends ChannelInboundHandlerAdapter {
 
     private void fileInfoUploadHandler(ByteBuf byteBuf, ChannelHandlerContext ctx, String terminalPhone, int replyFlowId) {
         int fileNameLength = byteBuf.readByte();
-        String fileName = byteBuf.readCharSequence(fileNameLength, Charset.forName("utf8")).toString().trim();
+        String fileName = byteBuf.readCharSequence(fileNameLength, StandardCharsets.UTF_8).toString().trim();
         int fileType = byteBuf.readByte();
         long fileSize = byteBuf.readUnsignedInt();
         sendCommonResponse(ctx, terminalPhone, 0x1211, replyFlowId);
@@ -163,7 +164,7 @@ public class SignallingHandler extends ChannelInboundHandlerAdapter {
     private void fileInfoUploadFinishHandler(ByteBuf byteBuf, ChannelHandlerContext ctx, String terminalPhone, int replyFlowId) {
         log.info("fileInfoUploadFinish");
         int fileNameLength = byteBuf.readByte();
-        String fileName = byteBuf.readCharSequence(fileNameLength, Charset.forName("utf8")).toString().trim();
+        String fileName = byteBuf.readCharSequence(fileNameLength, StandardCharsets.UTF_8).toString().trim();
         int fileType = byteBuf.readByte();
         long fileSize = byteBuf.readUnsignedInt();
         // 回复
